@@ -1,6 +1,6 @@
 import { Navigate, Routes, Route } from 'react-router-dom';
 
-import Layout from 'components/layout';
+import Layout from 'common/Layout';
 import LoginPage from 'routes/login';
 import MoviesPage from 'routes/movies';
 
