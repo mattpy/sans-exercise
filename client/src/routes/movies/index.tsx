@@ -1,24 +1,20 @@
 import { useEffect, useState } from 'react';
-import { Helmet } from 'react-helmet';
 import axios from 'axios';
 
 import MovieList from 'routes/movies/MovieList';
 import MovieListItem from 'routes/movies/MovieListItem';
 import Spinner from 'common/Spinner';
-import { IMovie } from 'lib/types';
+import { DBMovie } from 'lib/types';
+import { getServerAddress } from 'lib/helpers';
 
 const MoviesPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [movies, setMovies] = useState<IMovie[]>([]);
+  const [movies, setMovies] = useState<DBMovie[]>([]);
 
   useEffect(() => {
     const fetch = async () => {
       setIsLoading(true);
-
-      const { data } = await axios.get(
-        'https://jsonplaceholder.typicode.com/posts'
-      );
-
+      const { data } = await axios.get(`${getServerAddress()}/movies`);
       setMovies(data);
       setIsLoading(false);
     };
@@ -26,23 +22,39 @@ const MoviesPage: React.FC = () => {
     fetch();
   }, []);
 
-  const onMovieDeleted = (id: number) => {
-    const filteredMovies = movies.filter(movie => movie.id !== id);
-    setMovies(filteredMovies);
+  const onMovieCreated = (createdMovie: DBMovie) => {
+    setMovies(movies => [...movies, createdMovie]);
+  };
+
+  const onMovieEdited = (editedMovie: DBMovie) => {
+    const _movies = [...movies];
+    const movieToUpdateIndex: number = movies.findIndex(
+      movie => movie.id === editedMovie.id
+    );
+    _movies.splice(movieToUpdateIndex, 1, editedMovie);
+    setMovies(_movies);
+  };
+
+  const onMovieDeleted = (deletedMovie: DBMovie) => {
+    setMovies(movies => movies.filter(movie => movie.id !== deletedMovie.id));
   };
 
   return (
     <>
-      <Helmet>
-        <title>SANS - Movies</title>
-      </Helmet>
       {isLoading && <Spinner />}
-      {!!movies.length && (
+      {!isLoading && (
         <MovieList
           movies={movies}
-          listItem={(movie: IMovie) => (
-            <MovieListItem movie={movie} onMovieDeleted={onMovieDeleted} />
+          // Render props to avoid prop drilling
+          render={movie => (
+            <MovieListItem
+              key={movie.id}
+              movie={movie}
+              onMovieEdited={onMovieEdited}
+              onMovieDeleted={onMovieDeleted}
+            />
           )}
+          onMovieCreated={onMovieCreated}
         />
       )}
     </>

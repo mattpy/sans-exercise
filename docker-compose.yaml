@@ -1,0 +1,26 @@
+version: "3.8"
+
+services:
+  mysql:
+    image: mysql
+    container_name: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+    volumes:
+      - data:/var/lib/mysql
+  server:
+    build:
+      context: ./server
+      dockerfile: ./dockerfiles/dev.Dockerfile
+    volumes:
+      - /app/node_modules
+    container_name: server
+    env_file:
+      - ./server/env/development.env
+    depends_on:
+      - mysql
+
+volumes:
+  data:
