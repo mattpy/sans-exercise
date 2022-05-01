@@ -21,6 +21,21 @@ services:
       - ./server/env/development.env
     depends_on:
       - mysql
+    ports:
+      - 4000:4000
+  client:
+    container_name: client
+    build:
+      context: ./client
+      dockerfile: ./Dockerfile.dev
+    volumes:
+      - ./client/src:/app/src
+    ports:
+      - 3000:3000
+    depends_on:
+      - server
+    stdin_open: true
+    tty: true
 
 volumes:
   data:

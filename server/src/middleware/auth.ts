@@ -14,7 +14,7 @@ export const auth = async (req, res, next) => {
   }
 
   try {
-    jwt.verify(token, 'secret');
+    jwt.verify(token, process.env.JWT_ACCESS_TOKEN_SECRET);
   } catch (error) {
     return res.status(401).json({ message: 'Unauthorized' });
   }

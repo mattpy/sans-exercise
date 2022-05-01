@@ -8,7 +8,7 @@ import { AppDataSource } from './data-source';
 import movieRoutes from './routes/movies';
 import userRoutes from './routes/user';
 
-const PORT = process.env.PORT || 7000;
+const PORT = process.env.PORT;
 
 (async () => {
   // Setup connection to database

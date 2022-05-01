@@ -3,15 +3,13 @@ import { Movie } from './entity/Movie';
 
 export const AppDataSource = new DataSource({
   type: 'mysql',
-  // host: 'mysql',
-  host: 'localhost',
+  host: 'mysql',
   port: 3306,
   username: 'root',
-  password: 'password',
+  password: process.env.MYSQL_USER_PASSWORD,
   database: 'sans',
   synchronize: true,
   logging: false,
   entities: [Movie],
   migrations: [],
-  subscribers: []
 });
