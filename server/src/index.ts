@@ -1,11 +1,13 @@
+import 'dotenv/config';
 import 'reflect-metadata';
 import express from 'express';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 
 import { AppDataSource } from './data-source';
 import movieRoutes from './routes/movies';
+import userRoutes from './routes/user';
 
-// const PORT = process.env.PORT;
 const PORT = process.env.PORT || 7000;
 
 (async () => {
@@ -20,7 +22,11 @@ const PORT = process.env.PORT || 7000;
   // Make request body accessible
   app.use(express.json());
 
+  // Setup cookie parser middleware
+  app.use(cookieParser());
+
   // Routes
+  app.use(userRoutes);
   app.use(movieRoutes);
 
   // Start server

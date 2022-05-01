@@ -6,6 +6,7 @@ import MovieListItem from 'routes/movies/MovieListItem';
 import Spinner from 'common/Spinner';
 import { DBMovie } from 'lib/types';
 import { getServerAddress } from 'lib/helpers';
+import { getAccessToken } from 'lib/token';
 
 const MoviesPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -14,7 +15,9 @@ const MoviesPage: React.FC = () => {
   useEffect(() => {
     const fetch = async () => {
       setIsLoading(true);
-      const { data } = await axios.get(`${getServerAddress()}/movies`);
+      const { data } = await axios.get(`${getServerAddress()}/movies`, {
+        headers: { Authorization: `Bearer ${getAccessToken()}` }
+      });
       setMovies(data);
       setIsLoading(false);
     };

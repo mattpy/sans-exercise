@@ -1,18 +1,23 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
+import axios from 'axios';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 
+import { getServerAddress } from 'lib/helpers';
+import { setAccessToken } from 'lib/token';
 import sansLogo from 'assets/images/sans.png';
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     // Get key from server
     setIsLoading(true);
+    const { data } = await axios.post(`${getServerAddress()}/login`);
+    setAccessToken(data.token);
     navigate('/movies');
   };
 

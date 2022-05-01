@@ -8,6 +8,7 @@ import Spinner from 'common/Spinner';
 import { Movie, DBMovie } from 'lib/types';
 import { getServerAddress } from 'lib/helpers';
 import { FormikProps } from 'formik';
+import { getAccessToken } from 'lib/token';
 
 interface IProps {
   initialValues: Movie | DBMovie;
@@ -25,7 +26,9 @@ const EditMovieFormHandler: React.FC<IProps> = ({
     formProps: FormikProps<{}>
   ) => {
     setIsLoading(true);
-    const { data } = await axios.put(`${getServerAddress()}/movies`, values);
+    const { data } = await axios.put(`${getServerAddress()}/movies`, values, {
+      headers: { Authorization: `Bearer ${getAccessToken()}` }
+    });
     handleEditSuccess(data);
   };
 

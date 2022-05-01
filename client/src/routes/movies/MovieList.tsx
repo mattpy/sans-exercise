@@ -12,10 +12,18 @@ interface IProps {
 }
 
 const MovieList: React.FC<IProps> = ({ movies, render, onMovieCreated }) => (
-  <Box sx={{ p: 2, margin: '0 auto', maxWidth: '700px' }}>
+  <Box
+    sx={{
+      p: 2,
+      margin: '0 auto',
+      maxWidth: '700px'
+    }}
+  >
     <MovieListHeader onMovieCreated={onMovieCreated} />
     {!!movies.length ? (
-      <List>{movies.map(movie => render(movie))}</List>
+      <List sx={{ maxHeight: 'calc(100vh - 150px)', overflowY: 'auto' }}>
+        {movies.map(movie => render(movie))}
+      </List>
     ) : (
       <Typography sx={{ mt: 2, textAlign: 'center' }}>
         There are currently no movies, try adding some!

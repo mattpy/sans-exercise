@@ -14,6 +14,7 @@ import EditMovieFormHandler from 'routes/movies/EditMovieFormHandler';
 
 import { DBMovie } from 'lib/types';
 import { getServerAddress } from 'lib/helpers';
+import { getAccessToken } from 'lib/token';
 
 interface MovieListItemProps {
   movie: DBMovie;
@@ -31,7 +32,9 @@ const MovieListItem: React.FC<MovieListItemProps> = ({
 
   const handleDelete = (movie: DBMovie) => async () => {
     setIsDeleting(true);
-    await axios.delete(`${getServerAddress()}/movies/${movie.id}`);
+    await axios.delete(`${getServerAddress()}/movies/${movie.id}`, {
+      headers: { Authorization: `Bearer ${getAccessToken()}` }
+    });
     onMovieDeleted(movie);
   };
 
@@ -83,8 +86,8 @@ const MovieListItem: React.FC<MovieListItemProps> = ({
           <LocalMoviesOutlinedIcon />
         </ListItemIcon>
         <ListItemText
-          primary={movie.title}
-          secondary={`Rating: ${movie.rating}`}
+          primary={`${movie.title} (${movie.releaseYear})`}
+          secondary={`Format: ${movie.format} / Length: ${movie.length} / Rating: ${movie.rating}`}
         />
       </ListItem>
 
