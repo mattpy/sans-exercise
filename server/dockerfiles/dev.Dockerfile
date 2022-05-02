@@ -16,4 +16,4 @@ ENV PORT=4000
 
 EXPOSE $PORT
 
-CMD [ "node", "build/index.js" ]
+CMD [ "pm2", "start", "build/index.js", "--exp-backoff-restart-delay=100" ]
